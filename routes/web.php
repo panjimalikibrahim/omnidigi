@@ -4,12 +4,14 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NewsController;
+use App\Http\Controllers\OmnidigiAiController;
 use App\Http\Controllers\OutageController;
 use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RewardController;
 use App\Http\Controllers\SimulasiController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 // ── Public Routes ──
@@ -17,6 +19,9 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/simulasi', [SimulasiController::class, 'index'])->name('simulasi');
 Route::post('/simulasi', [SimulasiController::class, 'hitung'])->name('simulasi.hitung');
 Route::get('/produk', [ProdukController::class, 'index'])->name('produk');
+
+// ── AI Chatbot Endpoint (Diperbaiki Menggunakan Controller) ──
+Route::post('/api/chat', [OmnidigiAiController::class, 'chat'])->name('omnidigi.ai.chat');
 
 // ── Pembayaran QRIS & Simulasi Scan ──
 Route::get('/bayar/qris', [PembayaranController::class, 'qris'])->name('qris.tampil');
@@ -51,13 +56,14 @@ Route::middleware('auth')->group(function () {
 
     // PLN Reward
     Route::get('/dashboard/reward', [RewardController::class, 'index'])->name('dashboard.reward');
+    Route::post('/dashboard/reward/redeem', [RewardController::class, 'redeem'])->name('dashboard.reward.redeem');
 
     // Pembayaran
     Route::post('/produk/bayar', [ProdukController::class, 'bayar'])->name('produk.bayar');
     Route::post('/produk/konfirmasi/{transaction}', [ProdukController::class, 'konfirmasi'])->name('produk.konfirmasi');
     Route::get('/produk/sukses/{transaction}', [ProdukController::class, 'sukses'])->name('produk.sukses');
 
-    // Profile (dari Breeze)
+    // Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -73,6 +79,22 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::put('/customers/{customer}', [AdminController::class, 'updateCustomer'])->name('customers.update');
     Route::delete('/customers/{customer}', [AdminController::class, 'deleteCustomer'])->name('customers.delete');
     Route::get('/transactions', [AdminController::class, 'transactions'])->name('transactions');
+
+    // Modul Klasifikasi Tagihan & Tunggakan
+    Route::get('/bills', [AdminController::class, 'bills'])->name('bills');
+
+    // Modul Tiket Gangguan & Dispatch
+    Route::get('/outages', [AdminController::class, 'outages'])->name('outages');
+    Route::post('/outages/{outage}/status', [AdminController::class, 'updateOutageStatus'])->name('outages.status');
+
+    // Modul Audit Meter Mandiri (SwaCAM)
+    Route::get('/meter-readings', [AdminController::class, 'meterReadings'])->name('meter_readings');
+    Route::post('/meter-readings/{meterReading}/verify', [AdminController::class, 'verifyMeterReading'])->name('meter_readings.verify');
+
+    // Pusat Dokumen & Surat Kedinasan
+    Route::get('/letters', [AdminController::class, 'letters'])->name('letters');
+    Route::get('/letters/preview', [AdminController::class, 'previewLetter'])->name('letters.preview');
+    Route::get('/letters/download-text', [AdminController::class, 'downloadText'])->name('letters.download_text');
 });
 
 require __DIR__.'/auth.php';

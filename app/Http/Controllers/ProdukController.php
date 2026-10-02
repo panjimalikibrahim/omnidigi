@@ -15,6 +15,7 @@ class ProdukController extends Controller
     public function index()
     {
         $products = [
+            // --- KATEGORI: PEMBAYARAN (3 PRODUK - PAS SIMETRIS GRID 3 KOLOM) ---
             [
                 'id' => 'tagihan',
                 'kategori' => 'pembayaran',
@@ -55,6 +56,28 @@ class ProdukController extends Controller
                 'route' => route('dashboard.token'),
                 'btn_text' => 'Beli Token',
             ],
+            [
+                'id' => 'nontaglis',
+                'kategori' => 'pembayaran',
+                'kategori_label' => 'Pembayaran',
+                'nama' => 'Pembayaran Nontaglis (Non-Tagihan Listrik)',
+                'badge' => 'Nontaglis',
+                'icon' => 'fa-receipt',
+                'icon_bg' => 'bg-purple-50 text-purple-600',
+                'badge_bg' => 'bg-purple-100/70 text-purple-800',
+                'ringkasan' => 'Bayar biaya transaksi di luar tagihan listrik rutin secara praktis dan aman.',
+                'deskripsi' => 'Layanan pembayaran resmi transaksi non-tagihan listrik seperti biaya permohonan pasang baru, tambah daya, penyesuaian UJL, pendaftaran event sementara, hingga denda kelistrikan.',
+                'fitur' => [
+                    'Pembayaran via Nomor Registrasi Nontaglis PLN',
+                    'Verifikasi status transaksi otomatis dan real-time',
+                    'Dukungan multi-metode pembayaran (QRIS, VA Bank, E-Wallet)',
+                    'Bukti transaksi elektronik (E-Receipt) terarsip resmi',
+                ],
+                'route' => route('dashboard'),
+                'btn_text' => 'Bayar Nontaglis',
+            ],
+
+            // --- KATEGORI: PENGAWASAN & METERAN (3 PRODUK) ---
             [
                 'id' => 'metering',
                 'kategori' => 'pengawasan',
@@ -115,10 +138,12 @@ class ProdukController extends Controller
                 'route' => route('dashboard.simulasi'),
                 'btn_text' => 'Buka Simulasi',
             ],
+
+            // --- KATEGORI: BANTUAN & REWARD (2 PRODUK) ---
             [
                 'id' => 'outage',
                 'kategori' => 'bantuan',
-                'kategori_label' => 'Bantuan & Layanan',
+                'kategori_label' => 'Bantuan & Reward',
                 'nama' => 'Lapor Gangguan & Pemadaman',
                 'badge' => 'Layanan 24 Jam',
                 'icon' => 'fa-exclamation-triangle',
@@ -138,7 +163,7 @@ class ProdukController extends Controller
             [
                 'id' => 'reward',
                 'kategori' => 'bantuan',
-                'kategori_label' => 'Bantuan & Layanan',
+                'kategori_label' => 'Bantuan & Reward',
                 'nama' => 'PLN Reward & Loyalty Point',
                 'badge' => 'Program Loyalitas',
                 'icon' => 'fa-gift',

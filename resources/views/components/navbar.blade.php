@@ -1,4 +1,4 @@
-{{-- Navbar --}}
+{{-- Navbar Component --}}
 <nav x-data="{ scrolled: false }" 
      @scroll.window="scrolled = (window.pageYOffset > 20)"
      :class="{ 'py-3 shadow-md bg-white/5 backdrop-blur-md': scrolled, 'py-5 bg-transparent backdrop-blur-sm': !scrolled }"
@@ -86,16 +86,36 @@
                 @auth
                     <div class="relative ml-2" x-data="{ open: false }">
                         <button @click="open = !open" class="flex items-center gap-2.5 px-4 py-2 bg-white/10 border border-white/20 rounded-full text-white text-sm font-medium hover:bg-white/20 transition-colors shadow-sm">
-                            <i class="fas fa-user-circle text-lg text-[#FDB813]"></i>
-                            <span>{{ auth()->user()->name }}</span>
+                            <div class="w-7 h-7 rounded-full bg-[#FDB813] text-slate-900 flex items-center justify-center font-bold text-xs overflow-hidden shrink-0">
+                                @if(auth()->user()->avatar_url)
+                                    <img src="{{ auth()->user()->avatar_url }}" alt="{{ auth()->user()->name }}" class="w-full h-full object-cover">
+                                @else
+                                    <i class="fas fa-user text-xs text-slate-800"></i>
+                                @endif
+                            </div>
+                            <span class="max-w-[140px] truncate font-semibold">{{ auth()->user()->name }}</span>
                             <i class="fas fa-chevron-down text-[10px] ml-1" :class="open ? 'rotate-180' : ''" style="transition: transform 0.2s"></i>
                         </button>
+                        
                         <div x-show="open" @click.away="open = false" x-transition
-                             class="absolute right-0 mt-3 w-48 bg-white rounded-xl shadow-xl border border-slate-100 py-2 z-50 overflow-hidden">
+                             class="absolute right-0 mt-3 w-52 bg-white rounded-xl shadow-xl border border-slate-100 py-2 z-50 overflow-hidden text-slate-800">
+                            <div class="px-4 py-2 border-b border-slate-100 bg-slate-50">
+                                <p class="text-xs font-bold text-slate-800 truncate">{{ auth()->user()->name }}</p>
+                                <p class="text-[10px] text-slate-400 truncate">{{ auth()->user()->email }}</p>
+                            </div>
+
                             <a href="{{ route('profile.edit') }}" class="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 hover:text-[#1B6EBB] transition-colors">
                                 <i class="fas fa-user-edit w-5 text-center text-slate-400 mr-2"></i> Profil
                             </a>
+                            
+                            @if(auth()->user()->isAdmin())
+                                <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 hover:text-amber-600 transition-colors">
+                                    <i class="fas fa-shield-alt w-5 text-center text-amber-500 mr-2"></i> Panel Admin
+                                </a>
+                            @endif
+
                             <div class="h-px bg-slate-100 my-1"></div>
+                            
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
                                 <button type="submit" class="w-full text-left px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors">
@@ -130,6 +150,7 @@
             <a href="{{ route('news.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-slate-600 hover:bg-slate-50"><i class="fas fa-newspaper w-6 text-center text-[#1B6EBB]"></i> Berita</a>
             @auth
                 <a href="{{ route('dashboard') }}" class="block px-3 py-2 rounded-md text-base font-medium text-slate-600 hover:bg-slate-50"><i class="fas fa-table-columns w-6 text-center text-[#1B6EBB]"></i> Dashboard</a>
+                <a href="{{ route('profile.edit') }}" class="block px-3 py-2 rounded-md text-base font-medium text-slate-600 hover:bg-slate-50"><i class="fas fa-user-edit w-6 text-center text-[#1B6EBB]"></i> Profil</a>
                 <hr class="border-slate-100 my-2">
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf

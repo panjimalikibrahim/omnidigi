@@ -14,7 +14,7 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->text('konten');
             $table->string('gambar')->nullable();
-            $table->enum('kategori', ['info', 'promo', 'gangguan', 'tips'])->default('info');
+            $table->enum('kategori', ['info', 'promo', 'penghargaan', 'gangguan', 'tips'])->default('info');
             $table->boolean('is_published')->default(true);
             $table->timestamp('published_at')->nullable();
             $table->timestamps();
